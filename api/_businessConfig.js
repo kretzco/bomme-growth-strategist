@@ -12,7 +12,15 @@ export const BUSINESS_CONFIG = {
     teamSize: 2,
     capitalConstraint: 'high'
   },
-
+  
+seo_authority: {
+  label: 'BOMME SEO Authority',
+  avgRevenue: 2000,
+  margin: 0.90,
+  channelPriority: 0.60,
+  cashflowModifier: 0.50,
+  founderDependency: 'low'
+},
   channels: {
     studio_production: {
       label: 'BOMME Studio Production',
