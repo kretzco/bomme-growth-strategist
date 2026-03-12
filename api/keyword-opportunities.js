@@ -172,7 +172,7 @@ export default async function handler(req, res) {
       seed_keywords = [],
       location_code = 2840,
       language_code = 'en',
-      limit = 50,
+      limit = 15,
       business_context = 'bomme-studio',
       existing_domain = business_context === 'bommesport'
         ? 'bommesport.com'
@@ -183,12 +183,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'seed_keywords must be a non-empty array.' });
     }
 
+    if (seed_keywords.length > 1) {
+      return res.status(400).json({
+        error: 'Use one seed keyword per request for now to avoid DataForSEO timeouts.'
+      });
+    }
+
+    const safeLimit = Math.min(Number(limit) || 15, 15);
+
     const payload = [{
       keywords: seed_keywords,
       location_code,
       language_code,
       include_seed_keyword: true,
-      limit
+      limit: safeLimit
     }];
 
     const response = await axios.post(
@@ -199,7 +207,7 @@ export default async function handler(req, res) {
           Authorization: getAuthHeader(),
           'Content-Type': 'application/json'
         },
-        timeout: 30000
+        timeout: 90000
       }
     );
 
@@ -289,14 +297,23 @@ export default async function handler(req, res) {
     return res.status(200).json({
       business_context,
       existing_domain,
+      seed_keywords,
+      limit: safeLimit,
       keywords
     });
   } catch (error) {
+    const isTimeout =
+      error.code === 'ECONNABORTED' ||
+      String(error.message || '').toLowerCase().includes('timeout');
+
     return res.status(500).json({
       error: 'DataForSEO request failed',
       message: error.message,
       status: error.response?.status || null,
-      data: error.response?.data || null
+      data: error.response?.data || null,
+      suggestion: isTimeout
+        ? 'Try one seed keyword per request and keep limit at 15 or lower.'
+        : null
     });
   }
 }
