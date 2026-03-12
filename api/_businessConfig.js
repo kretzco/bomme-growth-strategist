@@ -12,7 +12,23 @@ export const BUSINESS_CONFIG = {
     teamSize: 2,
     capitalConstraint: "high"
   },
-
+  
+  searchConsole: {
+    properties: {
+      "bomme-studio": {
+        domain: "bommestudio.com",
+        siteUrl: "sc-domain:bommestudio.com",
+        homepage: "https://www.bommestudio.com/"
+      },
+      bommesport: {
+        domain: "bommesport.com",
+        siteUrl: "sc-domain:bommesport.com",
+        homepage: "https://bommesport.com/"
+      }
+    },
+    defaultProperty: "bomme-studio"
+  },
+  
   channels: {
     seo_authority: {
       label: "BOMME SEO Authority",
