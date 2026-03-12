@@ -12,22 +12,23 @@ export const BUSINESS_CONFIG = {
     teamSize: 2,
     capitalConstraint: 'high'
   },
-  
-seo_authority: {
-  label: 'BOMME SEO Authority',
-  avgRevenue: 2000,
-  margin: 0.90,
-  channelPriority: 0.60,
-  cashflowModifier: 0.50,
-  founderDependency: 'low'
-},
+
   channels: {
+    seo_authority: {
+      label: 'BOMME SEO Authority',
+      avgRevenue: 2000,
+      margin: 0.90,
+      channelPriority: 0.60,
+      cashflowModifier: 0.50,
+      founderDependency: 'low'
+    },
+
     studio_production: {
       label: 'BOMME Studio Production',
       avgRevenue: 35000,
-      margin: 0.425, // midpoint of 35%–50%
+      margin: 0.425,
       channelPriority: 1.0,
-      cashflowModifier: 1.0, // direct cash
+      cashflowModifier: 1.0,
       founderDependency: 'high',
       maxParallel: 3
     },
@@ -37,17 +38,17 @@ seo_authority: {
       avgRevenue: 10000,
       margin: 0.60,
       channelPriority: 0.95,
-      cashflowModifier: 1.0, // direct cash
+      cashflowModifier: 1.0,
       founderDependency: 'high',
       monthlyCapacity: 20
     },
 
     digital_assets: {
       label: 'BOMME Studio Digital Assets',
-      avgRevenue: 99, // midpoint of 49–149
+      avgRevenue: 99,
       margin: 0.90,
       channelPriority: 0.85,
-      cashflowModifier: 1.0, // direct cash
+      cashflowModifier: 1.0,
       founderDependency: 'low'
     },
 
@@ -58,7 +59,7 @@ seo_authority: {
       margin: 0.515,
       affiliateMargin: 0.40,
       channelPriority: 0.65,
-      cashflowModifier: 0.35, // strategic only for immediate runway
+      cashflowModifier: 0.35,
       founderDependency: 'medium'
     },
 
@@ -67,13 +68,13 @@ seo_authority: {
       avgRevenue: 80,
       margin: 0.30,
       channelPriority: 0.60,
-      cashflowModifier: 0.35, // strategic only
+      cashflowModifier: 0.35,
       founderDependency: 'medium'
     },
 
     pattern_vault: {
       label: 'BOMME Pattern Vault',
-      avgRevenue: 139, // midpoint of 79–199
+      avgRevenue: 139,
       margin: 0.90,
       channelPriority: 0.55,
       cashflowModifier: 0.25,
