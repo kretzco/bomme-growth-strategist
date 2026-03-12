@@ -1,20 +1,179 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "BOMME SEO Intelligence API",
+    "title": "BOMME Growth Strategist API",
     "version": "1.0.0",
-    "description": "A thin wrapper around DataForSEO for BOMME SEO analysis."
+    "description": "Growth intelligence API for BOMME Studio and BOMMESPORT. Use these actions for keyword research, SERP analysis, content briefs, competitor gaps, asset ideation, and weekly prioritization."
   },
   "servers": [
     {
-      "url": "https://REPLACE_WITH_YOUR_VERCEL_DOMAIN"
+      "url": "https://bomme-gaia.vercel.app"
     }
   ],
   "paths": {
+    "/api/asset-ideas": {
+      "post": {
+        "operationId": "getAssetIdeas",
+        "summary": "Get digital asset ideas",
+        "description": "Use this to identify monetizable digital assets such as calculators, spreadsheets, templates, guides, and checklists.",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio",
+                    "description": "Business context to tailor asset ideas."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Asset ideas response"
+          }
+        }
+      }
+    },
+    "/api/content-brief": {
+      "post": {
+        "operationId": "getContentBrief",
+        "summary": "Generate a structured content brief",
+        "description": "Use this after identifying a viable keyword. Generates titles, H1, slug, sections, internal links, and monetization hooks.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keyword": {
+                    "type": "string",
+                    "description": "The target keyword to build the brief around."
+                  },
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio"
+                  },
+                  "competitors": {
+                    "type": "array",
+                    "description": "Optional competitor pages or SERP results used to improve the brief.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": { "type": "string" },
+                        "description": { "type": "string" },
+                        "url": { "type": "string" }
+                      }
+                    }
+                  }
+                },
+                "required": ["keyword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Content brief response"
+          }
+        }
+      }
+    },
+    "/api/competitor-gap": {
+      "post": {
+        "operationId": "getCompetitorGap",
+        "summary": "Analyze competitor gaps",
+        "description": "Use this to identify format, intent, topic, conversion, authority, and monetization gaps around a target keyword.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "target_keyword": {
+                    "type": "string",
+                    "description": "The keyword to analyze."
+                  },
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio"
+                  },
+                  "competitors": {
+                    "type": "array",
+                    "description": "Optional competitor pages or SERP results.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": { "type": "string" },
+                        "description": { "type": "string" },
+                        "url": { "type": "string" },
+                        "domain": { "type": "string" }
+                      }
+                    }
+                  }
+                },
+                "required": ["target_keyword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Competitor gap response"
+          }
+        }
+      }
+    },
+    "/api/growth-opportunities": {
+      "post": {
+        "operationId": "getGrowthOpportunities",
+        "summary": "Get prioritized growth opportunities",
+        "description": "Use this to prioritize a small list of candidate keywords or topics by channel and business impact.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keywords": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Candidate keywords or topics to prioritize."
+                  },
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio"
+                  }
+                },
+                "required": ["keywords"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Growth opportunities response"
+          }
+        }
+      }
+    },
     "/api/keyword-opportunities": {
       "post": {
         "operationId": "getKeywordOpportunities",
-        "summary": "Get keyword opportunities from seed keywords",
+        "summary": "Get keyword opportunities from a seed keyword",
+        "description": "Use this for keyword discovery. Send one seed keyword per request to reduce timeout risk. Good for manufacturer terms, BOMMESPORT category terms, and fabric authority topics.",
         "requestBody": {
           "required": true,
           "content": {
@@ -24,11 +183,31 @@
                 "properties": {
                   "seed_keywords": {
                     "type": "array",
+                    "description": "Send exactly one seed keyword per request for best reliability.",
+                    "minItems": 1,
+                    "maxItems": 1,
                     "items": { "type": "string" }
                   },
-                  "location_code": { "type": "integer", "default": 2840 },
-                  "language_code": { "type": "string", "default": "en" },
-                  "limit": { "type": "integer", "default": 50 }
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio"
+                  },
+                  "location_code": {
+                    "type": "integer",
+                    "default": 2840,
+                    "description": "DataForSEO location code."
+                  },
+                  "language_code": {
+                    "type": "string",
+                    "default": "en",
+                    "description": "Language code."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "Keep this at 15 or lower for reliability."
+                  }
                 },
                 "required": ["seed_keywords"]
               }
@@ -37,35 +216,7 @@
         },
         "responses": {
           "200": {
-            "description": "Keyword opportunities"
-          }
-        }
-      }
-    },
-    "/api/serp-snapshot": {
-      "post": {
-        "operationId": "getSerpSnapshot",
-        "summary": "Get top live SERP results for a keyword",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "keyword": { "type": "string" },
-                  "location_code": { "type": "integer", "default": 2840 },
-                  "language_code": { "type": "string", "default": "en" },
-                  "depth": { "type": "integer", "default": 10 }
-                },
-                "required": ["keyword"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "SERP snapshot"
+            "description": "Keyword opportunities response"
           }
         }
       }
@@ -73,7 +224,8 @@
     "/api/page-gap-analysis": {
       "post": {
         "operationId": "getPageGapAnalysis",
-        "summary": "Get competitor SERP results for a target page and keyword",
+        "summary": "Analyze a page against the SERP",
+        "description": "Use this to compare an existing page against the SERP for a target keyword and get prioritized recommendations.",
         "requestBody": {
           "required": true,
           "content": {
@@ -81,11 +233,31 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "url": { "type": "string" },
-                  "target_keyword": { "type": "string" },
-                  "location_code": { "type": "integer", "default": 2840 },
-                  "language_code": { "type": "string", "default": "en" },
-                  "depth": { "type": "integer", "default": 10 }
+                  "url": {
+                    "type": "string",
+                    "description": "The existing page URL to evaluate."
+                  },
+                  "target_keyword": {
+                    "type": "string",
+                    "description": "The keyword the page should rank for."
+                  },
+                  "business_context": {
+                    "type": "string",
+                    "enum": ["bomme-studio", "bommesport"],
+                    "default": "bomme-studio"
+                  },
+                  "location_code": {
+                    "type": "integer",
+                    "default": 2840
+                  },
+                  "language_code": {
+                    "type": "string",
+                    "default": "en"
+                  },
+                  "depth": {
+                    "type": "integer",
+                    "default": 10
+                  }
                 },
                 "required": ["url", "target_keyword"]
               }
@@ -94,7 +266,94 @@
         },
         "responses": {
           "200": {
-            "description": "Page gap analysis data"
+            "description": "Page gap analysis response"
+          }
+        }
+      }
+    },
+    "/api/serp-snapshot": {
+      "post": {
+        "operationId": "getSerpSnapshot",
+        "summary": "Get live SERP results for a keyword",
+        "description": "Use this to inspect the ranking pages, dominant page formats, and domains currently winning a query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keyword": {
+                    "type": "string",
+                    "description": "The keyword to inspect."
+                  },
+                  "location_code": {
+                    "type": "integer",
+                    "default": 2840
+                  },
+                  "language_code": {
+                    "type": "string",
+                    "default": "en"
+                  },
+                  "depth": {
+                    "type": "integer",
+                    "default": 10
+                  }
+                },
+                "required": ["keyword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SERP snapshot response"
+          }
+        }
+      }
+    },
+    "/api/weekly-briefing": {
+      "get": {
+        "operationId": "getWeeklyBriefing",
+        "summary": "Get a weekly strategy briefing",
+        "description": "Use this to retrieve a lightweight prioritized summary of current actions and focus areas.",
+        "responses": {
+          "200": {
+            "description": "Weekly briefing response"
+          }
+        }
+      }
+    },
+    "/api/amazon-listing-gap": {
+      "post": {
+        "operationId": "getAmazonListingGap",
+        "summary": "Analyze an Amazon listing gap",
+        "description": "Use this for BOMMESPORT Amazon listing optimization, including positioning and missing elements.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_title": {
+                    "type": "string",
+                    "description": "The product title to analyze."
+                  },
+                  "competitor_titles": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Optional competitor product titles."
+                  }
+                },
+                "required": ["product_title"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Amazon listing gap response"
           }
         }
       }
