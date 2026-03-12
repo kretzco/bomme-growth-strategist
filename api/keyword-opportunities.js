@@ -169,7 +169,7 @@ export default async function handler(req, res) {
 
   try {
     const {
-      seed_keywords = [],
+      seed_keyword = [],
       location_code = 2840,
       language_code = 'en',
       limit = 15,
@@ -179,11 +179,11 @@ export default async function handler(req, res) {
         : 'bommestudio.com'
     } = req.body || {};
 
-    if (!Array.isArray(seed_keywords) || seed_keywords.length === 0) {
-      return res.status(400).json({ error: 'seed_keywords must be a non-empty array.' });
+    if (!Array.isArray(seed_keyword) || seed_keyword.length === 0) {
+      return res.status(400).json({ error: 'seed_keyword must be a non-empty array.' });
     }
 
-    if (seed_keywords.length > 1) {
+    if (seed_keyword.length > 1) {
       return res.status(400).json({
         error: 'Use one seed keyword per request for now to avoid DataForSEO timeouts.'
       });
@@ -192,7 +192,7 @@ export default async function handler(req, res) {
     const safeLimit = Math.min(Number(limit) || 15, 15);
 
     const payload = [{
-      keywords: seed_keywords,
+      keywords: seed_keyword,
       location_code,
       language_code,
       include_seed_keyword: true,
@@ -297,7 +297,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       business_context,
       existing_domain,
-      seed_keywords,
+      seed_keyword,
       limit: safeLimit,
       keywords
     });
