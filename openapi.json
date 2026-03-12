@@ -1,0 +1,103 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BOMME SEO Intelligence API",
+    "version": "1.0.0",
+    "description": "A thin wrapper around DataForSEO for BOMME SEO analysis."
+  },
+  "servers": [
+    {
+      "url": "https://REPLACE_WITH_YOUR_VERCEL_DOMAIN"
+    }
+  ],
+  "paths": {
+    "/api/keyword-opportunities": {
+      "post": {
+        "operationId": "getKeywordOpportunities",
+        "summary": "Get keyword opportunities from seed keywords",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "seed_keywords": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "location_code": { "type": "integer", "default": 2840 },
+                  "language_code": { "type": "string", "default": "en" },
+                  "limit": { "type": "integer", "default": 50 }
+                },
+                "required": ["seed_keywords"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Keyword opportunities"
+          }
+        }
+      }
+    },
+    "/api/serp-snapshot": {
+      "post": {
+        "operationId": "getSerpSnapshot",
+        "summary": "Get top live SERP results for a keyword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keyword": { "type": "string" },
+                  "location_code": { "type": "integer", "default": 2840 },
+                  "language_code": { "type": "string", "default": "en" },
+                  "depth": { "type": "integer", "default": 10 }
+                },
+                "required": ["keyword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SERP snapshot"
+          }
+        }
+      }
+    },
+    "/api/page-gap-analysis": {
+      "post": {
+        "operationId": "getPageGapAnalysis",
+        "summary": "Get competitor SERP results for a target page and keyword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": { "type": "string" },
+                  "target_keyword": { "type": "string" },
+                  "location_code": { "type": "integer", "default": 2840 },
+                  "language_code": { "type": "string", "default": "en" },
+                  "depth": { "type": "integer", "default": 10 }
+                },
+                "required": ["url", "target_keyword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Page gap analysis data"
+          }
+        }
+      }
+    }
+  }
+}
