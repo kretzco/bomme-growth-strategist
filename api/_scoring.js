@@ -64,6 +64,11 @@ export function estimateBusinessFit({
     return 5;
   }
 
+  if (channelKey === 'seo_authority') {
+    if (/fabric|textile|gsm|fabric weight|material guide|knit fabric|woven fabric|french terry|jersey knit|rib knit|interlock/i.test(k)) return 9;
+    return 6;
+  }
+
   if (channelKey === 'bommesport_dtc' || channelKey === 'bommesport_amazon') {
     if (/heavyweight|oversized|hoodie|blank|sweatshirt|jogger|french terry/i.test(k)) return 10;
     if (/streetwear|loungewear|premium basics/i.test(k)) return 8;
@@ -90,7 +95,6 @@ function getVolumeFactor(searchVolume = 0) {
 function getIntentModifier(intent = 'mixed', channelKey = '') {
   const normalized = normalizeIntent(intent);
 
-  // Strong bias toward cash-driving intent for Studio
   if (channelKey === 'studio_production' || channelKey === 'studio_development') {
     if (normalized === 'buyer') return 1.35;
     if (normalized === 'commercial') return 1.15;
@@ -100,7 +104,6 @@ function getIntentModifier(intent = 'mixed', channelKey = '') {
     return 0.65;
   }
 
-  // Digital assets can monetize informational traffic better
   if (channelKey === 'digital_assets') {
     if (normalized === 'buyer') return 1.0;
     if (normalized === 'commercial') return 1.15;
@@ -110,7 +113,15 @@ function getIntentModifier(intent = 'mixed', channelKey = '') {
     return 0.8;
   }
 
-  // BOMMESPORT can tolerate more research intent, but still not pure fluff
+  if (channelKey === 'seo_authority') {
+    if (normalized === 'buyer') return 0.9;
+    if (normalized === 'commercial') return 1.0;
+    if (normalized === 'commercial investigation') return 1.0;
+    if (normalized === 'research') return 1.05;
+    if (normalized === 'informational' || normalized === 'educational') return 1.1;
+    return 0.95;
+  }
+
   if (channelKey === 'bommesport_dtc' || channelKey === 'bommesport_amazon') {
     if (normalized === 'buyer') return 1.1;
     if (normalized === 'commercial') return 1.15;
@@ -140,6 +151,13 @@ function getPageTypeModifier(pageType = '', opportunityType = '', channelKey = '
     if (combined.includes('article')) return 0.8;
   }
 
+  if (channelKey === 'seo_authority') {
+    if (combined.includes('article')) return 1.1;
+    if (combined.includes('comparison')) return 1.0;
+    if (combined.includes('directory')) return 0.95;
+    if (combined.includes('tool')) return 0.8;
+  }
+
   if (channelKey === 'bommesport_dtc' || channelKey === 'bommesport_amazon') {
     if (combined.includes('landing')) return 1.1;
     if (combined.includes('comparison')) return 1.15;
@@ -152,16 +170,14 @@ function getPageTypeModifier(pageType = '', opportunityType = '', channelKey = '
 function getKeywordPenalty(keyword = '', channelKey = '', businessContext = 'bomme-studio') {
   const k = String(keyword).toLowerCase();
 
-  // Penalize low-intent fabric glossary traffic for Studio if it lacks commercial bridge
   if (
     businessContext === 'bomme-studio' &&
     channelKey === 'studio_production' &&
-    /fabric by the yard|cotton voile|lining fabric|sheer cotton fabric|disney fabric|winter holiday fabric|strawberry fabric|purple lace fabric|theatre fabric/i.test(k)
+    /fabric by the yard|cotton voile|lining fabric|sheer cotton fabric|disney fabric panel|winter holiday fabric|strawberry fabric|purple lace fabric|theatre fabric/i.test(k)
   ) {
     return 0.45;
   }
 
-  // Penalize decorative / hobbyist fabric traffic
   if (
     /joann|quilting|upholstery|craft fabric|legendary toadstools fabric|fabric by the yard/i.test(k)
   ) {
@@ -196,7 +212,13 @@ export function calculateOpportunityScore({
   const timeHorizon = estimateTimeHorizon(opportunityType, pageType, channelKey);
   const timeWeight = BUSINESS_CONFIG.timeHorizonWeights[timeHorizon] ?? 1.0;
 
-  const revenueBase = Number.isFinite(Number(estimatedRevenue))
+  const hasEstimatedRevenue =
+    estimatedRevenue !== null &&
+    estimatedRevenue !== undefined &&
+    estimatedRevenue !== '' &&
+    Number.isFinite(Number(estimatedRevenue));
+
+  const revenueBase = hasEstimatedRevenue
     ? Number(estimatedRevenue)
     : channel.avgRevenue;
 
@@ -211,7 +233,6 @@ export function calculateOpportunityScore({
   const pageTypeModifier = getPageTypeModifier(pageType, opportunityType, channelKey);
   const keywordPenalty = getKeywordPenalty(keyword, channelKey, businessContext);
 
-  // Core business-weighted score before compression
   const raw =
     revenueBase *
     channel.margin *
@@ -224,10 +245,7 @@ export function calculateOpportunityScore({
     keywordPenalty *
     timeWeight;
 
-  // More meaningful penalty for difficult work
   const adjusted = raw / Math.pow(difficultyWeight, 1.15);
-
-  // Wider score spread
   const score = clamp(Math.round(Math.sqrt(adjusted) / 6), 1, 100);
 
   let priority = 'low';
