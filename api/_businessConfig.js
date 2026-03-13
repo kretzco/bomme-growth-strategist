@@ -12,7 +12,7 @@ export const BUSINESS_CONFIG = {
     teamSize: 2,
     capitalConstraint: "high"
   },
-  
+
   searchConsole: {
     properties: {
       "bomme-studio": {
@@ -28,7 +28,7 @@ export const BUSINESS_CONFIG = {
     },
     defaultProperty: "bomme-studio"
   },
-  
+
   channels: {
     seo_authority: {
       label: "BOMME SEO Authority",
@@ -142,26 +142,40 @@ export const BUSINESS_CONFIG = {
     homepage: "https://www.bommestudio.com/",
 
     protectedPrimaryTopics: {
-      "https://www.bommestudio.com/": "clothing manufacturer"
+      "https://www.bommestudio.com/": "clothing manufacturer",
+      "https://bommesport.com/": "heavyweight hoodie"
     },
 
     pagePriorities: {
-      "https://www.bommestudio.com/": 100,
-      "https://www.bommestudio.com/private-label-clothing": 98,
-      "https://www.bommestudio.com/full-package-production": 96,
-      "https://www.bommestudio.com/los-angeles-clothing-production": 90,
-      "https://www.bommestudio.com/activewear-manufacturers": 90,
-      "https://www.bommestudio.com/t-shirt-manufacturers": 87,
-      "https://www.bommestudio.com/loungewear-manufacturers": 84,
-      "https://www.bommestudio.com/underwear-manufacturer": 82,
-      "https://www.bommestudio.com/streetwear-clothing-manufacturers": 70,
-      "https://www.bommestudio.com/clothing-sample-development": 78,
-      "https://www.bommestudio.com/patternmakers-los-angeles": 72,
-      "https://www.bommestudio.com/sample-makers-los-angeles": 72,
-      "https://www.bommestudio.com/fabric-shrinkage-calculator": 68,
-      "https://www.bommestudio.com/academy/clothing-tech-pack-guide": 50,
-      "https://www.bommestudio.com/how-to-start-a-clothing-line": 52,
-      "https://www.bommestudio.com/free-tech-pack-template": 50,
+      "bomme-studio": {
+        "https://www.bommestudio.com/": 100,
+        "https://www.bommestudio.com/private-label-clothing": 98,
+        "https://www.bommestudio.com/full-package-production": 96,
+        "https://www.bommestudio.com/contract-clothing-manufacturer-for-select-clients": 95,
+        "https://www.bommestudio.com/los-angeles-clothing-production": 90,
+        "https://www.bommestudio.com/activewear-manufacturers": 88,
+        "https://www.bommestudio.com/t-shirt-manufacturers": 87,
+        "https://www.bommestudio.com/loungewear-manufacturers": 84,
+        "https://www.bommestudio.com/underwear-manufacturer": 82,
+        "https://www.bommestudio.com/streetwear-clothing-manufacturers": 70,
+        "https://www.bommestudio.com/clothing-sample-development": 78,
+        "https://www.bommestudio.com/patternmakers-los-angeles": 72,
+        "https://www.bommestudio.com/sample-makers-los-angeles": 72,
+        "https://www.bommestudio.com/free-tech-pack-template": 76,
+        "https://www.bommestudio.com/fabric-shrinkage-calculator": 68,
+        "https://www.bommestudio.com/academy/clothing-tech-pack-guide": 50,
+        "https://www.bommestudio.com/how-to-start-a-clothing-line": 52,
+        "https://www.bommestudio.com/how-to-start-clothing-company-expert-guides-business-tools": 54
+      },
+
+      bommesport: {
+        "https://bommesport.com/": 100,
+        "https://bommesport.com/products/heavyweight-hoodie": 98,
+        "https://bommesport.com/products/heavyweight-crewneck": 94,
+        "https://bommesport.com/products/heavyweight-jogger": 92,
+        "https://bommesport.com/collections/all": 75,
+        "https://bommesport.com/pages/size-guide": 45
+      }
     },
 
     pageGroups: {
@@ -169,6 +183,7 @@ export const BUSINESS_CONFIG = {
         "https://www.bommestudio.com/",
         "https://www.bommestudio.com/private-label-clothing",
         "https://www.bommestudio.com/full-package-production",
+        "https://www.bommestudio.com/contract-clothing-manufacturer-for-select-clients",
         "https://www.bommestudio.com/los-angeles-clothing-production",
         "https://www.bommestudio.com/activewear-manufacturers",
         "https://www.bommestudio.com/t-shirt-manufacturers",
@@ -216,7 +231,10 @@ export const BUSINESS_CONFIG = {
       "contract-clothing",
       "full-package",
       "sample-development",
-      "patternmakers"
+      "patternmakers",
+      "products/heavyweight-hoodie",
+      "products/heavyweight-crewneck",
+      "products/heavyweight-jogger"
     ],
 
     priorityQueries: [
@@ -230,7 +248,11 @@ export const BUSINESS_CONFIG = {
       "activewear manufacturer",
       "t shirt manufacturer",
       "loungewear manufacturer",
-      "underwear manufacturer"
+      "underwear manufacturer",
+      "heavyweight hoodie",
+      "oversized hoodie",
+      "blank hoodie",
+      "french terry hoodie"
     ],
 
     queryIntentRules: {
@@ -240,7 +262,10 @@ export const BUSINESS_CONFIG = {
         "factory",
         "production company",
         "contract clothing",
-        "apparel manufacturer"
+        "apparel manufacturer",
+        "heavyweight hoodie",
+        "oversized hoodie",
+        "blank hoodie"
       ],
       commercial: [
         "cost",
@@ -248,7 +273,9 @@ export const BUSINESS_CONFIG = {
         "quote",
         "sample development",
         "patternmaker",
-        "los angeles"
+        "los angeles",
+        "best",
+        "premium"
       ],
       educational: [
         "how to",
