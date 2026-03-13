@@ -203,18 +203,26 @@ export const BUSINESS_CONFIG = {
       ]
     },
 
-    excludedUrlPatterns: [
-      "/blog/category/",
-      "/blog/tag/",
-      "/fabric-dictionary/category/",
-      "/fabric-dictionary/tag/",
-      "/tag/",
-      "/category/",
-      "/author/",
-      "/custom-clothing/p/",
-      "new-home-1"
-    ],
-
+excludedUrlPatterns: [
+  "/blog/category/",
+  "/blog/tag/",
+  "/fabric-dictionary/category/",
+  "/fabric-dictionary/tag/",
+  "/tag/",
+  "/category/",
+  "/author/",
+  "/custom-clothing/p/",
+  "new-home-1",
+  "/cdn/shop/",
+  "?variant=",
+  "&country=",
+  "&currency=",
+  "utm_",
+  "/pages/return-exchange-policy",
+  "/pages/sitemap",
+  "http://"
+],
+    
     deprioritizedUrlPatterns: [
       "/blog/",
       "/press",
